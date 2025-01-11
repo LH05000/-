@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问答系统</title>
+    <link rel="stylesheet" href="styless.css">
+</head>
+<body>
+    <section id="question-form">
+        <h2>提出问题</h2>
+        <form id="askQuestionForm">
+            <input type="text" id="questionTitle" placeholder="问题标题" required>
+            <textarea id="questionBody" placeholder="问题详细描述" required></textarea>
+            <button type="submit">提交问题</button>
+        </form>
+    </section>
+
+    <section id="questions">
+        <h2>问题列表</h2>
+        <!-- 问题将通过JS动态加载 -->
+    </section>
+
+    <footer>
+        <p>&copy; 2024 问答系统</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>失物招领</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    
+    header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+        text-align: center;
+    }
+    
+    section {
+        padding: 20px;
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    input, textarea {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+    }
+    
+    button {
+        padding: 10px 20px;
+        background-color: #5cb85c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    button:hover {
+        background-color: #4cae4c;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    li {
+        background-color: #fff;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    
+    footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        position: fixed;
+        width: 100%;
+        height:30px;
+        bottom: 0;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <h1>失物招领</h1>
+    </header>
+
+    <section id="post-lost-item">
+        <h2>发布失物</h2>
+        <form id="lostItemForm">
+            <input type="text" id="lostItemName" placeholder="失物名称" required>
+            <input type="text" id="lostItemDescription" placeholder="失物描述" required>
+            <input type="file" id="lostItemImage" accept="image/*" required>
+            <input type="text" id="contactInfo" placeholder="联系方式" required>
+            <button type="submit">发布</button>
+        </form>
+    </section>
+
+    <section id="lost-items">
+        <h2>失物列表</h2>
+        <ul id="lostItemsList"></ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 失物招领平台</p>
+    </footer>
+
+    <script>
+        document.getElementById('lostItemForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('lostItemName').value;
+            const description = document.getElementById('lostItemDescription').value;
+            const image = document.getElementById('lostItemImage').files[0];
+            const contact = document.getElementById('contactInfo').value;
+
+            const lostItemsList = document.getElementById('lostItemsList');
+            const item = document.createElement('li');
+            item.innerHTML = `
+                <h3>${name}</h3>
+                <p>${description}</p>
+                <img src="${URL.createObjectURL(image)}" alt="${name}">
+                <p>联系方式: ${contact}</p>
+                <button class="answer-button">回答</button>
+                <div class="answer-container"></div>
+            `;
+            lostItemsList.appendChild(item);
+
+            document.getElementById('lostItemName').value = '';
+            document.getElementById('lostItemDescription').value = '';
+            document.getElementById('lostItemImage').value = '';
+            document.getElementById('contactInfo').value = '';
+        });
+
+        // 为每个回答按钮添加事件监听器
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('answer-button')) {
+                const answerContainer = event.target.nextElementSibling;
+                const answerInput = document.createElement('input');
+                answerInput.type = 'text';
+                answerInput.placeholder = '在这里输入你的回答...';
+
+                const submitButton = document.createElement('button');
+                submitButton.textContent = '提交回答';
+                submitButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // 阻止表单默认提交行为
+                    const userAnswer = answerInput.value;
+                    if (userAnswer.trim() !== '') {
+                        const newAnswerDisplay = document.createElement('div');
+                        newAnswerDisplay.textContent = userAnswer;
+                        answerContainer.appendChild(newAnswerDisplay);
+                        answerInput.value = '';
+                        answerInput.style.display = 'none'; // 隐藏输入框
+                        submitButton.style.display = 'none'; // 隐藏提交按钮
+                    }
+                });
+
+                answerContainer.appendChild(answerInput);
+                answerContainer.appendChild(submitButton);
+                answerInput.style.display = 'block'; // 显示输入框
+                submitButton.style.display = 'block'; // 显示提交按钮
+            }
+        });
+    </script>
+</body>
+</html>
